@@ -67,7 +67,7 @@ class BookInstance(models.Model):
     imprint = models.CharField(max_length=200)
     status = models.ForeignKey('Status', on_delete=models.CASCADE, null=True)
     due_back = models.DateField(null=True, blank=True)
-    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,)
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return '%s %s %s' % (self.inv_nom, self.book, self.status)
