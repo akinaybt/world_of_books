@@ -2,12 +2,15 @@ from knox.models import AuthToken
 from rest_framework import generics, viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes, action
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import Author, Book, BookInstance, Genre
-from .serializers import BookCreateSerializer, BookUpdateSerializer, BookDeleteSerializer, RegisterSerializer, \
-    UserSerializer, AuthorSerializer, LoanedBooksSerializer
+from .models import Author, Book, BookInstance, Genre, Language, Status
+from .serializers import (
+    BookSerializer, RegisterSerializer,
+    UserSerializer, AuthorSerializer,
+    LanguageSerializer, StatusSerializer,
+    GenreSerializer, BookInstanceSerializer
+)
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -28,15 +31,9 @@ class AuthorViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorSerializer
 
 
-class BookListView(ListCreateAPIView):
-    serializer_class = BookCreateSerializer
+class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
-
-
-class BookDestroyAPIView(DestroyAPIView):
-    serializer_class = BookDeleteSerializer
-    queryset = Book.objects.all()
-    lookup_field = 'title'
+    serializer_class = BookSerializer
 
 
 @api_view(['GET'])
@@ -49,5 +46,21 @@ def registration_view(request, format=None):
     return Response(content)
 
 
+class LanguageViewSet(viewsets.ModelViewSet):
+    serializer_class = LanguageSerializer
+    queryset = Language.objects.all()
 
 
+class StatusViewSet(viewsets.ModelViewSet):
+    serializer_class = StatusSerializer
+    queryset = Status.objects.all()
+
+
+class GenreViewSet(viewsets.ModelViewSet):
+    serializer_class = GenreSerializer
+    queryset = Genre.objects.all()
+
+
+class BookInstanceViewSet(viewsets.ModelViewSet):
+    serializer_class = BookInstanceSerializer
+    queryset = BookInstance.objects.all()
