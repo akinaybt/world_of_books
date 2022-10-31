@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Author, Book, BookInstance, Genre
+from .models import Author, Book, BookInstance, Genre, Language, Status
 from django.contrib.auth.models import User
 
 
@@ -11,7 +11,6 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_author_name(self, obj):
-
         return obj.last_name, obj.first_name
 
 
@@ -35,14 +34,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class BookCreateSerializer(serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     genre_title = serializers.SerializerMethodField()
     language_name = serializers.SerializerMethodField()
 
-
     def get_language_name(self, obj):
         return obj.language.name
-
 
     def get_genre_title(self, obj):
         return obj.genre.name
@@ -52,24 +49,31 @@ class BookCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class BookUpdateSerializer(serializers.ModelSerializer):
+class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Book
-        fields = ('id',)
+        model = Language
+        fields = '__all__'
 
 
-class BookDeleteSerializer(serializers.ModelSerializer):
+class StatusSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Book
-        fields = ('id',)
+        model = Status
+        fields = '__all__'
 
 
-class LoanedBooksSerializer(serializers.ModelSerializer):
-    borrowers_name = serializers.SerializerMethodField()
-    book_title = serializers.SerializerMethodField()
+class BookInstanceSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = BookInstance
         fields = '__all__'
 
+    def get_status(self, obj):
+        return obj.status.name
 
+
+
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = '__all__'
